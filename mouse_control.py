@@ -11,10 +11,11 @@ mouse.click('middle')
 
 
 # get the current location of your mouse
-mouse.get_position() 
+position = mouse.get_position() 
 #current position of the mouse using the "position" function
-position = mouse.position()
+#position = mouse.position()
 print(position)
 
 mouse.move_relative(10, 20)
 #mouse cursor relative to its current position
+
