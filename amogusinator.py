@@ -1,6 +1,7 @@
 #this_is_where_we_will_make_our_class_for_all_the_tasks
 import mouse
 from time import sleep
+from PIL import ImageGrab
 
 screen_x = 2560
 screen_y = 1440
@@ -31,7 +32,7 @@ def swipe_card():
     y2 = screen_y * 0.42
     
     mouse.drag(x2,y2, x3, y2, absolute=True, duration=0.6)
-    mouse.click(button="left")
+    #mouse.click(button="left")
     
     return
 
@@ -70,6 +71,46 @@ def fuel_engines():
 
 
 def fix_wiring():
+    
+    px = ImageGrab.grab().load()
+    
+    x0 = screen_x*0.293
+    x1 = screen_x*0.702
+    
+    y0 = screen_y*0.249
+    y1 = screen_y*0.426
+    y2 = screen_y*0.596
+    y3 = screen_y*0.769
+    
+    y_values = [y0, y1, y2, y3]
+    
+    colour_left0 = px[x0, y0] #topleft
+    colour_left1 = px[x0, y1]
+    colour_left2 = px[x0, y2]
+    colour_left3 = px[x0, y3]
+    
+    colour_right0 = px[x1, y0] #topright
+    colour_right1 = px[x1, y1]
+    colour_right2 = px[x1, y2]
+    colour_right3 = px[x1, y3]
+    
+    left_colors = [colour_left0, colour_left1, colour_left2, colour_left3]
+    right_colors = [colour_right0, colour_right1, colour_right2, colour_right3]
+
+    # Find matching pairs
+    matching_pairs = []
+
+    for left_index, left_color in enumerate(left_colors):
+        for right_index, right_color in enumerate(right_colors):
+            if left_color == right_color:
+                matching_pairs.append((left_index, right_index, y_values[left_index], y_values[right_index]))
+
+    print(matching_pairs)
+    
+    for i in range(4):
+        mouse.drag(x0, matching_pairs[i][2], x1, matching_pairs[i][3], absolute=True, duration=0.14)
+        sleep(0.02)
+
     return
 
 def empty_garbage(): #empty_chute
@@ -104,4 +145,6 @@ def align_engine_output():
 
 while True:
     if mouse.is_pressed(button='right'):
-        swipe_card()
+        fix_wiring()
+        #swipe_card()
+        sleep(1)
