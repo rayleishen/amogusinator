@@ -1,5 +1,6 @@
 #this_is_where_we_will_make_our_class_for_all_the_tasks
 import mouse
+import time
 from time import sleep
 from PIL import ImageGrab
 
@@ -120,6 +121,51 @@ def divert_power():
     return
 
 def clear_asteroids():
+
+    boundingLeftX = int(screen_x*0.3203125) # 820 in 1440p
+    boundingRightX = int(screen_x*0.6796875) # 1740 in 1440p
+    boundingTopY = int(screen_y*0.17361111111) # 250 in 1440p
+    boundingBottomY = int(screen_y*0.82638888888) # 1190 in 1440p
+    asteroidsFound = 0
+    foundAllAsteroids = False
+    allowSearch = True
+    targetColour1 = (24,56,41)
+    targetColour2 = (26,60,42)
+    targetColour3 = (31,72,41)
+
+    # print("starting")
+    startTime = time.time()
+    while(foundAllAsteroids == False):
+        if asteroidsFound >= 20:
+            foundAllAsteroids = True
+            break
+        px = ImageGrab.grab().load()
+        print(asteroidsFound)
+
+
+        for x in range(boundingLeftX, boundingRightX):
+            if allowSearch == True:
+                for y in range(boundingTopY, boundingBottomY):
+                    if allowSearch == True:
+                        currentColour = px[x,y]
+                        # print(currentColour)
+                        if (currentColour == targetColour1 or currentColour == targetColour2 or currentColour == targetColour3):
+                            mouse.move(x,y)
+                            mouse.click(button="left")
+                            asteroidsFound += 1
+                            allowSearch = False
+                    else:
+                        break
+            else:
+                break
+
+        allowSearch = True
+        sleep(0.6)
+        endTime = time.time()
+        if ((endTime - startTime) > 30):
+            break
+                    
+
     return
 
 def clean_vent():
@@ -145,6 +191,5 @@ def align_engine_output():
 
 while True:
     if mouse.is_pressed(button='right'):
-        fix_wiring()
-        #swipe_card()
-        sleep(1)
+        clear_asteroids()
+        break
